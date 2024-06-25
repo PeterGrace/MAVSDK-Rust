@@ -237,6 +237,9 @@ pub enum Error {
     /// Invalid request data
     #[error("Invalid request: {0}")]
     InvalidRequestData(String),
+    /// Unsupported
+    #[error("Unsupported: {0}")]
+    Unsupported(String),
 }
 
 impl From<Error> for RequestError<Error> {
@@ -274,6 +277,9 @@ impl FromRpcResponse<pb::SetVisionPositionEstimateResponse> for SetVisionPositio
             }
             pb::mocap_result::Result::InvalidRequestData => {
                 Err(Error::InvalidRequestData(rpc_mocap_result.result_str).into())
+            }
+            pb::mocap_result::Result::Unsupported => {
+                Err(Error::Unsupported(rpc_mocap_result.result_str).into())
             }
         }
     }
